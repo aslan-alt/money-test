@@ -32,8 +32,6 @@ export default {
     flex-direction: column;
     overflow: auto;
   }
-  .nav{
-
-  }
+  
 }
 </style>

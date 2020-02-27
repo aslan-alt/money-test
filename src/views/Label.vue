@@ -3,9 +3,9 @@ import Icon from '@/components/icons.vue';
   <div>
     <Layout>
       <div>
-        <ul class="tags" >
+        <ul class="tags">
           <router-link v-for="tag in tags" :key="tag.id" :to="`/labels/edit/${tag.id}`">
-            <li >
+            <li>
               <span>{{tag.name}}</span>
               <Icon iconName="right" class="right" />
             </li>
@@ -13,7 +13,7 @@ import Icon from '@/components/icons.vue';
         </ul>
       </div>
       <div class="createTag-wrapper">
-        <button @click="createTag" class="createTag">新建标签</button>
+        <Button @click="createTag">新建标签</Button>
       </div>
     </Layout>
   </div>
@@ -21,11 +21,12 @@ import Icon from '@/components/icons.vue';
 
 <script lang="ts">
 import Icon from "@/components/icons.vue";
+import Button from "@/components/Button.vue";
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
 import tagListModel from "../model/tagListModel";
 tagListModel.fetch();
-@Component({ components: { Icon } })
+@Component({ components: { Icon, Button } })
 export default class Label extends Vue {
   tags = tagListModel.data;
 

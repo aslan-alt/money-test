@@ -3,11 +3,11 @@
     <div class="current">
       <ul>
         <li
-          v-for="item in dataSource"
-          :key="item.id"
-          @click="toggle(item.name)"
+          v-for="(item,index) in dataSource"
+          :key="index"
+          @click="toggle(item)"
           :class="selectedTags.indexOf(item)>=0&&'selected'"
-        >{{item.name}}</li>
+        >{{item}}</li>
       </ul>
     </div>
     <div class="new">
@@ -35,14 +35,22 @@ export default class Tags extends Vue {
   }
   create() {
     const name = window.prompt("请输入内容")!;
-    this.$emit("update:dataSource", [...this.dataSource!, name]);
-    tagListModel.create(name);
+    if (name) {
+      this.$emit("update:dataSource", [...this.dataSource!, name]);
+      tagListModel.create(name);
+      window.alert("创建成功");
+    } else {
+      if (name === '') {
+        window.alert("内容不能为空哦");
+      }
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
 .tags {
+  background: white;
   padding: 16px;
   font-size: 14px;
   flex-grow: 1;
