@@ -1,16 +1,22 @@
-import Icon from '@/components/icons.vue';
+
 <template>
   <Layout>
     <div class="navBar">
-      <Icon class="left-Icon" iconName="left" />
+      <Icon class="left-Icon" iconName="left" @click="goBack" />
       <span class="title">编辑标签</span>
       <span class="rightIcon"></span>
     </div>
     <div>
-      <Notes class="form-wrapper" filedName="标签名" placeholder="请输入标签名" />
+      <Notes
+        :value="tag.name"
+        @update:value="updateTag"
+        class="form-wrapper"
+        filedName="标签名"
+        placeholder="请输入标签名"
+      />
     </div>
     <div class="button-wrapper">
-      <Button>删除标签</Button>
+      <Button @click="remove">删除标签</Button>
     </div>
   </Layout>
 </template>
@@ -22,20 +28,39 @@ import Notes from "../components/money/notes.vue";
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
 import tagListModel from "@/model/tagListModel.ts";
+import model from "@/model/model.ts";
 
 @Component({ components: { Icon, Notes, Button } })
 export default class Edit extends Vue {
+  tag?: { id: string; name: string } = undefined;
   created() {
-    const t = this.$route.params.userId;
+    const id = this.$route.params.userId;
     tagListModel.fetch();
     const tags = tagListModel.data;
-    const tag = tags.filter(item => item.id === t)[0];
+    const tag = tags.filter(item => item.id === id)[0];
     console.log("xxxx");
     if (tag) {
-      console.log(tag);
+      this.tag = tag;
     } else {
       this.$router.push("/404");
     }
+  }
+  updateTag(name: string) {
+    if (this.tag) {
+      tagListModel.update(this.tag.id, name);
+    }
+  }
+  remove() {
+    if (this.tag) {
+      tagListModel.remove(this.tag.id);
+      window.alert("删除成功！三秒后自动返回");
+      setTimeout(() => {
+        this.$router.back();
+      }, 3000);
+    }
+  }
+  goBack() {
+    this.$router.back();
   }
 }
 </script>
@@ -64,7 +89,7 @@ export default class Edit extends Vue {
   background: white;
   margin-top: 8px;
 }
-.button-wrapper{
+.button-wrapper {
   text-align: center;
   padding: 16px;
   margin-top: 44-16px;
