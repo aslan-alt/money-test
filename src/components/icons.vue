@@ -25,6 +25,7 @@ export default {
   svg{
     width: 1em;
     height: 1em;
+    fill: currentColor;
     vertical-align:-0.15em;
     overflow: hidden;
   }

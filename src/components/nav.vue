@@ -36,7 +36,6 @@ nav {
     .icon {
       width: 33px;
       height: 33px;
-      fill: currentColor;
     }
     
   }

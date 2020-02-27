@@ -2,20 +2,43 @@
   <div class="tags">
     <div class="current">
       <ul>
-        <li>衣</li>
-        <li>食</li>
-        <li>住</li>
-        <li>行</li>
+        <li
+          v-for="(item,index) in dataSource"
+          :key="index"
+          @click="toggle(item)"
+          :class="selectedTags.indexOf(item)>=0&&'selected'"
+        >{{item}}</li>
       </ul>
     </div>
     <div class="new">
-      <button>新建标签</button>
+      <button @click="create">新建标签</button>
     </div>
   </div>
 </template>
 
-<script>
-export default {};
+<script lang='ts'>
+import Vue from "vue";
+import { Component, Prop } from "vue-property-decorator";
+import tagListModel from "@/model/tagListModel.ts";
+@Component
+export default class Tags extends Vue {
+  @Prop() dataSource: string[] | undefined;
+  selectedTags: string[] = [];
+  toggle(tag: string) {
+    const index = this.selectedTags.indexOf(tag);
+    if (index >= 0) {
+      this.selectedTags.splice(index, 1);
+    } else {
+      this.selectedTags.push(tag);
+      this.$emit("update:selected", this.selectedTags);
+    }
+  }
+  create() {
+    const name = window.prompt("请输入内容")!;
+    this.$emit("update:dataSource", [...this.dataSource!, name]);
+    tagListModel.create(name);
+  }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -36,14 +59,19 @@ export default {};
       max-height: 100px;
       overflow: auto;
     }
+    $color: #d9d9d9;
     li {
-      background: #d9d9d9;
+      background: $color;
       height: 24px;
       border-radius: 12px;
       padding: 0 16px;
       margin-right: 12px;
       line-height: 24px;
       margin-bottom: 5px;
+      &.selected {
+        background: darken($color, 25%);
+        color: white;
+      }
     }
   }
   > .new {

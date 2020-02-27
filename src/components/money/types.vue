@@ -1,25 +1,25 @@
 <template>
   <div>
     <ul class="types">
-      <li @click="selectedType('-')" :class="type==='-'&&'selected'">支出</li>
-      <li @click="selectedType('+')" :class="type==='+'&&'selected'">收入</li>
+      <li @click="selectedType('-')" :class="value==='-'&&'selected'">支出</li>
+      <li @click="selectedType('+')" :class="value==='+'&&'selected'">收入</li>
     </ul>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import { Component} from "vue-property-decorator";
+import { Component, Watch, Prop} from "vue-property-decorator";
 @Component
 export default class Types extends Vue {
-  type = "-";
-
+  @Prop(String)value!: string;
   selectedType(type: string) {
     if (type !== "-" && type !== "+") {
       throw new Error("type is unkon");
     }
-    this.type = type;
+    this.$emit('update:value',type)
   }
+
 }
 
 
