@@ -14,8 +14,12 @@ const routes = [
     component: () => import('../views/Money.vue')
   },
   {
-    path: '/label',
+    path: '/labels',
     component: () => import('../views/Label.vue')
+  },
+  {
+    path: '/labels/edit/:userId',
+    component: () => import('../views/EditLabel.vue'),
   },
   {
     path: '/statistics',

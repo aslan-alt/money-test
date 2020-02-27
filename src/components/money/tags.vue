@@ -3,11 +3,11 @@
     <div class="current">
       <ul>
         <li
-          v-for="(item,index) in dataSource"
-          :key="index"
-          @click="toggle(item)"
+          v-for="item in dataSource"
+          :key="item.id"
+          @click="toggle(item.name)"
           :class="selectedTags.indexOf(item)>=0&&'selected'"
-        >{{item}}</li>
+        >{{item.name}}</li>
       </ul>
     </div>
     <div class="new">

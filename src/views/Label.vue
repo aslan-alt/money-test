@@ -3,11 +3,13 @@ import Icon from '@/components/icons.vue';
   <div>
     <Layout>
       <div>
-        <ul class="tags">
-          <li v-for="(tag,index) in tags" :key="index">
-            <span>{{tag}}</span>
-            <Icon iconName="right" class="right" />
-          </li>
+        <ul class="tags" >
+          <router-link v-for="tag in tags" :key="tag.id" :to="`/labels/edit/${tag.id}`">
+            <li >
+              <span>{{tag.name}}</span>
+              <Icon iconName="right" class="right" />
+            </li>
+          </router-link>
         </ul>
       </div>
       <div class="createTag-wrapper">
@@ -17,7 +19,7 @@ import Icon from '@/components/icons.vue';
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import Icon from "@/components/icons.vue";
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
@@ -26,6 +28,7 @@ tagListModel.fetch();
 @Component({ components: { Icon } })
 export default class Label extends Vue {
   tags = tagListModel.data;
+
   createTag() {
     const name = window.prompt("请输出标签名");
     if (name) {

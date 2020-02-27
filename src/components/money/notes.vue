@@ -1,8 +1,8 @@
 <template>
   <div>
     <label class="notes">
-      <span class="name">备注{{value}}</span>
-      <input type="text" placeholder="请输入备注" v-model="value"/>
+      <span class="name">{{filedName}}</span>
+      <input type="text" :placeholder="placeholder" v-model="value"/>
     </label>
   </div>
 </template>
@@ -13,6 +13,8 @@ import {Component, Watch, Prop} from 'vue-property-decorator';
 @Component
 export default class Notes extends Vue{
   value = ''
+  @Prop({required:true})filedName!: string;
+  @Prop({required:true})placeholder!: string;
   @Watch('value')
   onNotesChanged(value: string,oldvalue: string){
     this.$emit('update:value',value)

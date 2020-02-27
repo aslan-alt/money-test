@@ -2,10 +2,8 @@
   <Layout class-prefix="layout">
    
     <Tags :data-source.sync="tags" :selected.sync="record.tags" />
-    
-    <Notes @update:value="updateNotes" />
+    <Notes @update:value="updateNotes" filedName="备注" placeholder="请输入备注"/>
     <Types :value.sync="record.type" />
-     
     <NumberPad :value.sync="record.amount" @submit="saveRecord" />
   </Layout>
 </template>
