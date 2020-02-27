@@ -1,17 +1,7 @@
-const localStorageKeyName = 'tagList'
-type tag = {
-    id: string;
-    name: string;
-}
-type TagListModel = {
-    data: tag[];
-    fetch: () => tag[];
-    create: (name: string) => 'success' | 'duplicated';
-    update: (id: string, name: string) => 'success' | 'not found' | 'duplicated';
-    remove: (id: string) => 'success' | 'not found';
-    save: () => void;
+import createId from '../lib/idCreator';
 
-}
+const localStorageKeyName = 'tagList'
+
 const tagListModel: TagListModel = {
     data: [],
     fetch() {
@@ -19,9 +9,10 @@ const tagListModel: TagListModel = {
         return this.data;
     },
     create(name: string) {
+        const id = createId().toString()
         const names = this.data.map(item => item.name)
         if (names.indexOf(name) >= 0) { return 'duplicated' }
-        this.data.push({ id: name, name: name })
+        this.data.push({  id, name: name })
         this.save()
         return 'success'
     },

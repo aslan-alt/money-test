@@ -27,36 +27,31 @@ import Icon from "@/components/icons.vue";
 import Notes from "../components/money/notes.vue";
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
-import tagListModel from "@/model/tagListModel.ts";
+
 import model from "@/model/model.ts";
 
 @Component({ components: { Icon, Notes, Button } })
 export default class Edit extends Vue {
-  tag?: { id: string; name: string } = undefined;
+  tag?: Tag = undefined;
   created() {
-    const id = this.$route.params.userId;
-    tagListModel.fetch();
-    const tags = tagListModel.data;
-    const tag = tags.filter(item => item.id === id)[0];
-    console.log("xxxx");
-    if (tag) {
-      this.tag = tag;
-    } else {
-      this.$router.push("/404");
+    this.tag = window.findTag(this.$route.params.userId);
+    if (!this.tag) {
+      this.$router.replace("/404");
     }
   }
   updateTag(name: string) {
     if (this.tag) {
-      tagListModel.update(this.tag.id, name);
+      window.updateTag(this.tag.id, name);
     }
   }
   remove() {
     if (this.tag) {
-      tagListModel.remove(this.tag.id);
-      window.alert("删除成功！三秒后自动返回");
-      setTimeout(() => {
+      if (window.removeTag(this.tag.id)) {
+        window.alert("删除成功！三秒后自动返回");
         this.$router.back();
-      }, 3000);
+      } else {
+        window.alert("删除失败");
+      }
     }
   }
   goBack() {

@@ -6,7 +6,7 @@
           v-for="(item,index) in dataSource"
           :key="index"
           @click="toggle(item.id)"
-          :class="selectedTags.indexOf(item)>=0&&'selected'"
+          :class="selectedTags.indexOf(item.id)>=0&&'selected'"
         >{{item.name}}</li>
       </ul>
     </div>
@@ -19,12 +19,16 @@
 <script lang='ts'>
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
-import tagListModel from "@/model/tagListModel.ts";
+
+import idCreator from '@/lib/idCreator.ts'
+
+
 @Component
 export default class Tags extends Vue {
   @Prop() dataSource: string[] | undefined;
   selectedTags: string[] = [];
   toggle(tag: string) {
+  
     const index = this.selectedTags.indexOf(tag);
     if (index >= 0) {
       this.selectedTags.splice(index, 1);
@@ -36,9 +40,9 @@ export default class Tags extends Vue {
   create() {
     const name = window.prompt("请输入内容")!;
     if (name) {
-      this.$emit("update:dataSource", [...this.dataSource!, name]);
-      tagListModel.create(name);
-      window.alert("创建成功");
+      console.log(...this.dataSource!)
+      this.$emit("update:dataSource", [...this.dataSource!, {id:idCreator().toString(),name}]);
+      window.createTag(name);
     } else {
       if (name === '') {
         window.alert("内容不能为空哦");
