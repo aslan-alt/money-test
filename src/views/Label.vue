@@ -1,4 +1,4 @@
-import Icon from '@/components/icons.vue';
+
 <template>
   <div>
     <Layout>
@@ -24,6 +24,8 @@ import Icon from "@/components/icons.vue";
 import Button from "@/components/Button.vue";
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
+import { mixins } from 'vue-class-component';
+import TagHelper from '@/minxins/tagHelper.ts';
 
 @Component({
   components: { Icon, Button },
@@ -33,15 +35,11 @@ import { Component } from "vue-property-decorator";
     }
   }
 })
-export default class Label extends Vue {
-
-
-  createTag() {
-    const name = window.prompt("请输出标签名");
-    if (name) {
-      // store2.createTags(name)
-    }
+export default class Label extends mixins(TagHelper) {
+  created(){
+    this.$store.commit("fetchTags");
   }
+  
 }
 </script>
 

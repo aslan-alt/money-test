@@ -11,7 +11,7 @@
       </ul>
     </div>
     <div class="new">
-      <button @click="create">新建标签</button>
+      <button @click="createTag">新建标签</button>
     </div>
   </div>
 </template>
@@ -21,16 +21,19 @@ import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 
 import idCreator from "@/lib/idCreator.ts";
+import { mixins } from 'vue-class-component';
 // import store2 from '@/store/index2.ts';
+import TagHelper from '@/minxins/tagHelper.ts';
+// const tagHelper: any = require("@/minxins/tagHelper");
 
 @Component({
   computed: {
-    tagList(){
-      return this.$store.state.tagList
+    tagList() {
+      return this.$store.state.tagList;
     }
   }
 })
-export default class Tags extends Vue {
+export default class Tags extends mixins(TagHelper) {
   selectedTags: string[] = [];
   toggle(tag: string) {
     const index = this.selectedTags.indexOf(tag);
@@ -41,19 +44,8 @@ export default class Tags extends Vue {
       this.$emit("update:selected", this.selectedTags);
     }
   }
-  created(){
-    this.$store.commit('fetchTags')
-  }
-  create() {
-    const name = window.prompt("请输入内容")!;
-    if (name) {
-      // this.$emit("update:dataSource", [...this.dataSource!, {id:idCreator().toString(),name}]);
-      this.$store.commit('createTags',name)
-    } else {
-      if (name === "") {
-        window.alert("内容不能为空哦");
-      }
-    }
+  created() {
+    this.$store.commit("fetchTags");
   }
 }
 </script>

@@ -25,10 +25,13 @@ const store = new Vuex.Store({
       value.createdAt = new Date();
       state.recordList.push(value);
       store.commit('saveRecords')
-     
+
     },
     saveRecords(state) {
       window.localStorage.setItem('recordList', JSON.stringify(state.recordList))
+    },
+    saveTags(state) {
+      window.localStorage.setItem('tagList', JSON.stringify(state.tagList))
     },
     createTags(state, name: string) {
       const names = state.tagList.map(item => item.name)
@@ -38,11 +41,10 @@ const store = new Vuex.Store({
       } else {
         const id = createId().toString()
         state.tagList.push({ id, name: name })
-        // this.saveTags()
+        store.commit('saveTags')
         window.alert("添加成功");
         return 'success'
       }
-
     },
     // updateTag(state,id: string, name: string) {
     //   const idList = state.tagList.map(item => item.id)
@@ -63,7 +65,8 @@ const store = new Vuex.Store({
 
     // },
     findTag(store, id: string) {
-      return store.tagList.filter(item => item.id === id)[0];
+      const tag = store.tagList.filter(item => item.id === id)
+      return tag;
     },
     removeTag(state, id: string) {
       let index = -1
@@ -77,7 +80,7 @@ const store = new Vuex.Store({
       // this.saveTags()
       return true
     },
-    
+
   },
   actions: {
   },

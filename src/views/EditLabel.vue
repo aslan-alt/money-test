@@ -35,7 +35,7 @@ import { Component } from "vue-property-decorator";
 export default class Edit extends Vue {
   tag?: Tag = undefined;
   created() {
-    // this.tag = this.$store.commit('findTag',{id:this.$route.params.userId})
+    // this.tag = this.$store.commit('findTag',this.$route.params.userId) as Tag;
     if (!this.tag) {
       this.$router.replace("/404");
     }
