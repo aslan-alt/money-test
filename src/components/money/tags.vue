@@ -3,7 +3,7 @@
     <div class="current">
       <ul>
         <li
-          v-for="(item,index) in dataSource"
+          v-for="(item,index) in tagList"
           :key="index"
           @click="toggle(item.id)"
           :class="selectedTags.indexOf(item.id)>=0&&'selected'"
@@ -20,15 +20,19 @@
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 
-import idCreator from '@/lib/idCreator.ts'
+import idCreator from "@/lib/idCreator.ts";
+// import store2 from '@/store/index2.ts';
 
-
-@Component
+@Component({
+  computed: {
+    tagList(){
+      return this.$store.state.tagList
+    }
+  }
+})
 export default class Tags extends Vue {
-  @Prop() dataSource: string[] | undefined;
   selectedTags: string[] = [];
   toggle(tag: string) {
-  
     const index = this.selectedTags.indexOf(tag);
     if (index >= 0) {
       this.selectedTags.splice(index, 1);
@@ -37,14 +41,16 @@ export default class Tags extends Vue {
       this.$emit("update:selected", this.selectedTags);
     }
   }
+  created(){
+    this.$store.commit('fetchTags')
+  }
   create() {
     const name = window.prompt("请输入内容")!;
     if (name) {
-      console.log(...this.dataSource!)
-      this.$emit("update:dataSource", [...this.dataSource!, {id:idCreator().toString(),name}]);
-      window.createTag(name);
+      // this.$emit("update:dataSource", [...this.dataSource!, {id:idCreator().toString(),name}]);
+      this.$store.commit('createTags',name)
     } else {
-      if (name === '') {
+      if (name === "") {
         window.alert("内容不能为空哦");
       }
     }
