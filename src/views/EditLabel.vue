@@ -28,32 +28,25 @@ import Notes from "../components/money/notes.vue";
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
 
-
-
-
 @Component({ components: { Icon, Notes, Button } })
 export default class Edit extends Vue {
   tag?: Tag = undefined;
   created() {
-    // this.tag = this.$store.commit('findTag',this.$route.params.userId) as Tag;
+    this.$store.commit("fetchTags");
+    this.$store.commit("findTag", this.$route.params.userId);
+    this.tag = this.$store.state.currentTag[0];
     if (!this.tag) {
       this.$router.replace("/404");
     }
   }
   updateTag(name: string) {
     if (this.tag) {
-      this.$store.commit('updateTag',{id:this.tag.id,name})
+      this.$store.commit("updateTag", { id: this.tag.id, name });
     }
   }
   remove() {
     if (this.tag) {
-      const t = this.$store.commit('removeTag',{id:this.tag.id})
-      // if () {
-      //   window.alert("删除成功！三秒后自动返回");
-      //   this.$router.back();
-      // } else {
-      //   window.alert("删除失败");
-      // }
+      this.$store.commit("removeTag", { id: this.tag.id });
     }
   }
   goBack() {

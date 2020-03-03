@@ -3,22 +3,24 @@ import Vuex from 'vuex'
 
 import clone from '@/model/clone';
 import createId from '@/lib/idCreator';
+import router from '../router/index';
 
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
     recordList: [] as RecordItem[],
-    tagList: [] as Tag[]
+    tagList: [] as Tag[],
+    currentTag: [] as Tag[]
   },
   mutations: {
     fetchRecords(state) {
       state.recordList = (JSON.parse(window.localStorage.getItem('recordList') || '[]')) as RecordItem[];
-      return state.recordList
+
     },
     fetchTags(state) {
       state.tagList = (JSON.parse(window.localStorage.getItem('tagList') || '[]'))
-      return state.tagList;
+
     },
     createRecords(state, record) {
       const value: RecordItem = clone(record)
@@ -46,39 +48,40 @@ const store = new Vuex.Store({
         return 'success'
       }
     },
-    // updateTag(state,id: string, name: string) {
-    //   const idList = state.tagList.map(item => item.id)
-    //   if (idList.indexOf(id) >= 0) {
-    //     const names = this.tagList.map(item => item.name)
-    //     if (names.indexOf(name) >= 0) {
-    //       return 'duplicated'
-    //     } else {
-    //       const tag = this.tagList.filter(item => item.id === id)[0]
-    //       tag.name = name
-    //       tag.id = name
-    //       this.saveTags()
-    //       return 'success'
-    //     }
-    //   } else {
-    //     return 'not found'
-    //   }
+    updateTag(state, payload) {
+      const idList = state.tagList.map(item => item.id)
+      if (idList.indexOf(payload.id) >= 0) {
+        const names = state.tagList.map(item => item.name)
+        if (!(names.indexOf(payload.name) >= 0)) {
+          const tag = state.tagList.filter(item => item.id === payload.id)[0]
+          tag.name = payload.name
+          tag.id = payload.id
+          store.commit('saveTags')
+        }
+      }
 
-    // },
-    findTag(store, id: string) {
-      const tag = store.tagList.filter(item => item.id === id)
-      return tag;
+    },
+    findTag(state, id: string) {
+      state.currentTag = state.tagList.filter(item => item.id === id)
+
     },
     removeTag(state, id: string) {
       let index = -1
-      for (let i = 0; i < this.tagList.length; i++) {
+      for (let i = 0; i < state.tagList.length; i++) {
         if (state.tagList[i].id === id) {
           index = i
           break
         }
       }
-      state.tagList.splice(index, 1)
-      // this.saveTags()
-      return true
+      if (index) {
+        state.tagList.splice(index, 1)
+        store.commit('saveTags')
+        window.alert("删除成功！三秒后自动返回");
+        router.back();
+      } else {
+        window.alert("删除失败");
+      }
+
     },
 
   },

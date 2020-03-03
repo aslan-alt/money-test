@@ -1,24 +1,20 @@
 <template>
-  <div>
-    <ul class="types">
-      <li @click="selectedType('-')" :class="value==='-'&&'selected'">支出</li>
-      <li @click="selectedType('+')" :class="value==='+'&&'selected'">收入</li>
-    </ul>
-  </div>
+   <Tab :data-source="typelist" :value.sync="type"/>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
 import { Component, Watch, Prop} from "vue-property-decorator";
-@Component
+import Tab from '@/components/tabs.vue'
+import intervalList from '@/constants/intervalList.ts'
+@Component({components:{Tab}})
 export default class Types extends Vue {
+  type = '-'
+  typelist = intervalList
+  
   @Prop(String)value!: string;
-  selectedType(type: string) {
-    if (type !== "-" && type !== "+") {
-      throw new Error("type is unkon");
-    }
-    this.$emit('update:value',type)
-  }
+  @Prop(String)classPrefix?: string;
+ 
 
 }
 

@@ -6,7 +6,7 @@
           v-for="(item,index) in tagList"
           :key="index"
           @click="toggle(item.id)"
-          :class="selectedTags.indexOf(item.id)>=0&&'selected'"
+          :class="selectedTags.indexOf(item.name)>=0&&'selected'"
         >{{item.name}}</li>
       </ul>
     </div>
@@ -18,12 +18,12 @@
 
 <script lang='ts'>
 import Vue from "vue";
-import { Component, Prop } from "vue-property-decorator";
+import { Component } from "vue-property-decorator";
 
 import idCreator from "@/lib/idCreator.ts";
-import { mixins } from 'vue-class-component';
+import { mixins } from "vue-class-component";
 // import store2 from '@/store/index2.ts';
-import TagHelper from '@/minxins/tagHelper.ts';
+import TagHelper from "@/minxins/tagHelper.ts";
 // const tagHelper: any = require("@/minxins/tagHelper");
 
 @Component({
@@ -36,12 +36,19 @@ import TagHelper from '@/minxins/tagHelper.ts';
 export default class Tags extends mixins(TagHelper) {
   selectedTags: string[] = [];
   toggle(tag: string) {
-    const index = this.selectedTags.indexOf(tag);
-    if (index >= 0) {
-      this.selectedTags.splice(index, 1);
-    } else {
-      this.selectedTags.push(tag);
-      this.$emit("update:selected", this.selectedTags);
+    for (const i in this.$store.state.tagList) {
+      if (this.$store.state.tagList[i].id === tag) {
+        const index = this.selectedTags.indexOf(
+          this.$store.state.tagList[i].name
+        );
+        if (index >= 0) {
+          this.selectedTags.splice(index, 1);
+        } else {
+          this.selectedTags.push(this.$store.state.tagList[i].name);
+          this.$emit("update:selected", this.selectedTags);
+        }
+        break;
+      }
     }
   }
   created() {

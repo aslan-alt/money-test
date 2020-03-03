@@ -2,7 +2,8 @@
   <Layout class-prefix="layout">
     <Tags :selected.sync="record.tags" />
     <Notes :value.sync="record.notes" filedName="备注" placeholder="请输入备注" class="notes" />
-    <Types :value.sync="record.type" />
+ 
+    <Tab :data-source="recordTypeList" classPrefix="money" :value.sync="record.type"/>
     <NumberPad :value.sync="record.amount" @submit="saveRecord" />
   </Layout>
 </template>
@@ -10,17 +11,19 @@
 <script lang="ts">
 import Tags from "@/components/money/tags.vue";
 import Notes from "@/components/money/notes.vue";
-import Types from "@/components/money/types.vue";
+import Tab from "@/components/tabs.vue"
 import NumberPad from "@/components/money/numberPad.vue";
+import recordTypeList from '@/constants/typeList.ts';
 import Vue from "vue";
 
 
-import { Component, Watch } from "vue-property-decorator";
+import { Component } from "vue-property-decorator";
 
-// console.log(tagList)
-@Component({ components: { Tags, Notes, Types, NumberPad } })
+
+@Component({ components: { Tags, Notes, Tab, NumberPad } })
 export default class Money extends Vue {
   record: RecordItem = { tags: [], notes: "", type: "-", amount: 0 };
+  recordTypeList = recordTypeList
   saveRecord() {
     // store2.createRecords(this.record);
     this.$store.commit("createRecords", this.record);
@@ -41,6 +44,8 @@ export default class Money extends Vue {
 
 <style lang="scss" scoped>
 @import "~@/assets/style/helper.scss";
+
+
 
 .notes {
   background: #f3f3f3;
