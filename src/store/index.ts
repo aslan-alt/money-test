@@ -10,9 +10,17 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
   state: {
     recordList: [] as RecordItem[],
-    tagList: [] as Tag[],
-    currentTag: [] as Tag[]
-  },
+    tagList: [],
+    currentTag:undefined 
+  } as RootState,
+  // getters:{
+  //   recordList(state){
+  //     return state.recordList
+  //   },
+  //   result(state){
+  //     return state.tagList
+  //   }
+  // },
   mutations: {
     fetchRecords(state) {
       state.recordList = (JSON.parse(window.localStorage.getItem('recordList') || '[]')) as RecordItem[];
@@ -20,13 +28,20 @@ const store = new Vuex.Store({
     },
     fetchTags(state) {
       state.tagList = (JSON.parse(window.localStorage.getItem('tagList') || '[]'))
-
+      if(!state.tagList ||state.tagList.length===0){
+        // state.tagList = [{id:'1',name:'衣'}]
+      }
     },
-    createRecords(state, record) {
+    createRecords(state, record: RecordItem) {
+      if(record.tags.length===0){
+        window.alert('至少要选择一个标签哦')
+        return
+      }
       const value: RecordItem = clone(record)
-      value.createdAt = new Date();
+      value.createdAt = new Date().toISOString();
       state.recordList.push(value);
       store.commit('saveRecords')
+      window.alert("已保存");
 
     },
     saveRecords(state) {
@@ -34,18 +49,19 @@ const store = new Vuex.Store({
     },
     saveTags(state) {
       window.localStorage.setItem('tagList', JSON.stringify(state.tagList))
+     
     },
     createTags(state, name: string) {
+      
       const names = state.tagList.map(item => item.name)
       if (names.indexOf(name) >= 0) {
         window.alert("标签名重复");
-        return 'duplicated'
       } else {
         const id = createId().toString()
         state.tagList.push({ id, name: name })
         store.commit('saveTags')
         window.alert("添加成功");
-        return 'success'
+        
       }
     },
     updateTag(state, payload) {
@@ -62,7 +78,7 @@ const store = new Vuex.Store({
 
     },
     findTag(state, id: string) {
-      state.currentTag = state.tagList.filter(item => item.id === id)
+      state.currentTag = state.tagList.filter(item => item.id === id)[0]
 
     },
     removeTag(state, id: string) {

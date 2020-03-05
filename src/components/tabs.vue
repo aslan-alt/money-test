@@ -39,7 +39,6 @@ export default class Types extends Vue {
   text-align: center;
   font-size: 24px;
   &-item {
-    
     display: flex;
     flex-grow: 1;
     justify-content: center;

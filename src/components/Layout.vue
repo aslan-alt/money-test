@@ -1,9 +1,10 @@
 <template>
   <div class="container">
+   
     <div class="viwe" :class="classPrefix&&`${classPrefix}-content`">
       <slot />
     </div>
-    <Nav class="nav" />
+     <Nav class="nav" />
 
   </div>
 </template>
@@ -24,8 +25,8 @@ export default {
   
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  
+  min-height: 100vh;
+  border: 1px solid red;
   .viwe{
     display: flex;
     flex-grow: 1;

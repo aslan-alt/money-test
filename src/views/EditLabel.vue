@@ -34,7 +34,7 @@ export default class Edit extends Vue {
   created() {
     this.$store.commit("fetchTags");
     this.$store.commit("findTag", this.$route.params.userId);
-    this.tag = this.$store.state.currentTag[0];
+    this.tag = this.$store.state.currentTag;
     if (!this.tag) {
       this.$router.replace("/404");
     }

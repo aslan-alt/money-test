@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -24,6 +25,9 @@ const routes = [
   {
     path: '/statistics',
     component: () => import('../views/Statistics.vue')
+  },{
+    path:'*',
+    component:()=>import('../views/notFound.vue')
   }
 ]
 

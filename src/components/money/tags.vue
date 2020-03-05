@@ -35,12 +35,10 @@ import TagHelper from "@/minxins/tagHelper.ts";
 })
 export default class Tags extends mixins(TagHelper) {
   selectedTags: string[] = [];
-  toggle(tag: string) {
+  toggle(id: string) {
     for (const i in this.$store.state.tagList) {
-      if (this.$store.state.tagList[i].id === tag) {
-        const index = this.selectedTags.indexOf(
-          this.$store.state.tagList[i].name
-        );
+      if (this.$store.state.tagList[i].id === id) {
+        const index = this.selectedTags.indexOf(this.$store.state.tagList[i].name);
         if (index >= 0) {
           this.selectedTags.splice(index, 1);
         } else {

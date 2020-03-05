@@ -25,7 +25,7 @@ export default class Money extends Vue {
   record: RecordItem = { tags: [], notes: "", type: "-", amount: 0 };
   recordTypeList = recordTypeList
   saveRecord() {
-    // store2.createRecords(this.record);
+    
     this.$store.commit("createRecords", this.record);
   }
   created(){
@@ -34,7 +34,7 @@ export default class Money extends Vue {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .layout-content {
   display: flex;
   flex-direction: column;
